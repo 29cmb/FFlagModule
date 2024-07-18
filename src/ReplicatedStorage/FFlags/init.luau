@@ -7,17 +7,23 @@ FFlags.Connected = false
 function FFlags:Load()
     if self.Loaded == false then
         self.API:Load()
+        local validated = self.Config:Validate()
+
+        if validated == false then 
+            return false
+        end
+
         self.Loaded = true
+        return self
     else
         print("FFlags is already loaded, cannot load again.")
     end
-
-    return self
 end
 
 function FFlags:Connect()
     if self.Loaded == false then 
-        self:Load()
+        warn("Flags cannot connect to API if the module has not been loaded")
+        return
     end
     
     local success, connection = pcall(function() 
