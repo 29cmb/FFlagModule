@@ -1,3 +1,0 @@
-local FFlags = {}
-
-return FFlags
