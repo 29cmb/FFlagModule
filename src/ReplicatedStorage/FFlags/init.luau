@@ -6,14 +6,18 @@ FFlags.Connected = false
 
 function FFlags:Load()
     if self.Loaded == false then
-        self.API:Load()
-        local validated = self.Config:Validate()
-
-        if validated == false then 
+        if self.Config:Validate() ~= true then
+            warn("Load failed!")
             return false
         end
 
+        local loaded = self.API:Load()
+        if loaded == false then warn("Load failed!") 
+            return false 
+        end
+
         self.Loaded = true
+        print("Loaded!")
         return self
     else
         print("FFlags is already loaded, cannot load again.")
