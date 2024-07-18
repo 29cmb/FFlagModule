@@ -40,8 +40,6 @@ function FFlags:Connect()
         self.Connection = connection
         return connection
     end
-    
-    return self
 end
 
 function FFlags:Extend()
