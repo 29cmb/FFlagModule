@@ -40,6 +40,38 @@ function api:Load()
             end)
         end
 
+        function apiConnection:GetFlags()
+            local success, data = pcall(function() 
+                return HttpService:PostAsync(url .. "/api/flags")
+            end)
+
+            if not success then 
+                warn("Failed to get FFlags: " .. err)
+            end
+
+            return HttpService:JSONDecode(data).data
+        end
+
+        function apiConnection:GetFFlagValue(flag)
+            local success, data = pcall(function() 
+                return HttpService:PostAsync(url .. "/api/get", HttpService:JSONEncode({
+                    ["flag"] = flag
+                }))
+            end)
+
+            if not success then 
+                warn("Failed to get FFlag: " .. err)
+            end
+
+            return HttpService:JSONDecode(data).value
+        end
+
+        function apiConnection:GetFFlagValueAsync(flag)
+            task.spawn(function()
+                self:GetFFlagValue(flag)
+            end)
+        end
+
         return apiConnection
     end
 end
