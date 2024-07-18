@@ -3,6 +3,7 @@ FFlags.Loaded = false
 FFlags.API = require(script.api)
 FFlags.Config = require(script.config)
 FFlags.Connected = false
+FFlags.Types = require(script.types)
 
 function FFlags:Load()
     if self.Loaded == false then

@@ -1,10 +1,11 @@
-local api = {}
+local Types = require(script.Parent.Types)
+local api = {} :: (Types.UnloadedAPI)
 local HttpService = game:GetService("HttpService")
 
 function api:Load()
-    api = require(script.Parent):Extend()
+    api  = require(script.Parent):Extend() :: (Types.API)
     function api:Connect()
-        local apiConnection = {}
+        local apiConnection = {} :: self.Types.APIConnection
 
         local url = self.Config.BASE_API_URL
         if not url or not string.match(url, "^(https?)://[%w-_]+%.[%w-_]+/?[%w-_/%.%?&=]*$") then 
@@ -19,6 +20,26 @@ function api:Load()
         if not success or err then 
             warn("API could not connect: " .. err)
             return false
+        end
+
+        function apiConnection:CreateFFlag(flag, value)
+            local success, data = pcall(function() 
+                return HttpService:PostAsync(url .. "/api/create", HttpService:JSONEncode({
+                    ["flag"] = flag, ["value"] = value
+                }))
+            end)
+
+            if not success then 
+                warn("Failed to create FFlag: " .. err)
+            end
+
+            return success
+        end
+
+        function apiConnection:CreateFFlagAsync(flag, value)
+            task.spawn(function()
+                self:CreateFFlag(flag, value)
+            end)
         end
 
         function apiConnection:SetFFlagValue(flag, value)
@@ -64,12 +85,6 @@ function api:Load()
             end
 
             return HttpService:JSONDecode(data).value
-        end
-
-        function apiConnection:GetFFlagValueAsync(flag)
-            task.spawn(function()
-                self:GetFFlagValue(flag)
-            end)
         end
 
         return apiConnection
