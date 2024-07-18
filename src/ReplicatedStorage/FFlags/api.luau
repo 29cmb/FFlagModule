@@ -35,7 +35,9 @@ function api:Load()
         end
 
         function apiConnection:SetFFlagValueAsync(flag, value)
-            return self:SetFFlagValue(flag, value)
+            task.spawn(function()
+                self:SetFFlagValue(flag, value)
+            end)
         end
 
         return apiConnection
