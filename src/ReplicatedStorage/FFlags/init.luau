@@ -37,6 +37,10 @@ function FFlags:Connect()
 
     if success and connection ~= false then
         print("Connected to API successfully")
+        if self.Connection then 
+            return self.Connection
+        end
+        
         self.Connected = true
         self.Connection = connection
         return connection

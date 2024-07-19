@@ -1,11 +1,12 @@
-local Types = require(script.Parent.Types)
+--!nocheck
+local Types = require(script.Parent.types)
 local api = {} :: (Types.UnloadedAPI)
 local HttpService = game:GetService("HttpService")
 
 function api:Load()
     api  = require(script.Parent):Extend() :: (Types.API)
     function api:Connect()
-        local apiConnection = {} :: self.Types.APIConnection
+        local apiConnection = {} :: Types.APIConnection
 
         local url = self.Config.BASE_API_URL
         if not url or not string.match(url, "^(https?)://[%w-_]+%.[%w-_]+/?[%w-_/%.%?&=]*$") then 
@@ -31,6 +32,7 @@ function api:Load()
 
             if not success then 
                 warn("Failed to create FFlag: " .. err)
+                return false
             end
 
             return success
@@ -50,6 +52,7 @@ function api:Load()
             end)
             if not success then 
                 warn("Failed to set FFlag value: " .. err)
+                return false
             end
 
             return success
@@ -63,11 +66,12 @@ function api:Load()
 
         function apiConnection:GetFlags()
             local success, data = pcall(function() 
-                return HttpService:PostAsync(url .. "/api/flags")
+                return HttpService:GetAsync(url .. "/api/flags")
             end)
 
             if not success then 
-                warn("Failed to get FFlags: " .. err)
+                warn("Failed to get FFlags: " .. data)
+                return false
             end
 
             return HttpService:JSONDecode(data).data
@@ -77,11 +81,12 @@ function api:Load()
             local success, data = pcall(function() 
                 return HttpService:PostAsync(url .. "/api/get", HttpService:JSONEncode({
                     ["flag"] = flag
-                }))
+                }, Enum.HttpContentType.ApplicationJson))
             end)
 
             if not success then 
                 warn("Failed to get FFlag: " .. err)
+                return false
             end
 
             return HttpService:JSONDecode(data).value
