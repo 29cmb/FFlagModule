@@ -105,6 +105,48 @@ function api:Load()
             return HttpService:JSONDecode(data).value
         end
 
+        function apiConnection:LockFFlag(flag)
+            local success, data = pcall(function() 
+                return HttpService:PostAsync(url .. "/api/lock", HttpService:JSONEncode({
+                    ["flag"] = flag
+                }))
+            end)
+
+            if not success then 
+                warn("Failed to lock FFlag: " .. err)
+                return false
+            end
+
+            return success
+        end
+
+        function apiConnection:LockFFlagAsync(flag) 
+            task.spawn(function()
+                self:LockFFlag(flag)
+            end)
+        end
+
+        function apiConnection:UnlockFFlag(flag)
+            local success, data = pcall(function() 
+                return HttpService:PostAsync(url .. "/api/unlock", HttpService:JSONEncode({
+                    ["flag"] = flag
+                }))
+            end)
+
+            if not success then 
+                warn("Failed to unlock FFlag: " .. err)
+                return false
+            end
+
+            return success
+        end
+
+        function apiConnection:UnlockFFlagAsync(flag) 
+            task.spawn(function()
+                self:UnlockFFlag(flag)
+            end)
+        end
+
         return apiConnection
     end
 end

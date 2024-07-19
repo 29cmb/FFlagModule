@@ -31,7 +31,7 @@ return {
             local flags = {}
 
             for _,fd in pairs(flagData) do 
-                table.insert(flags, { Text = fd.flag .. ": " .. (if typeof(fd.value) == "boolean" then (if fd.value == true then "✅" else "❌") else fd.value) })
+                table.insert(flags, { Text = (if fd.locked == true then "🔒" else "") .. fd.flag .. ": " .. (if typeof(fd.value) == "boolean" then (if fd.value == true then "✅" else "❌") else fd.value) })
             end
 
             return flags
