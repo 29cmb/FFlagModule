@@ -1,22 +1,22 @@
 --!nocheck
 --[[
     This is a nexus admin command
-    It is located at ServerScriptService -> Admin -> MainModule -> IncludedCommands -> BasicCommands -> flags
+    It is located at ServerScriptService -> Admin -> MainModule -> IncludedCommands -> BasicCommands -> flaglogs
 ]]
 
 local IncludedCommandUtil = require(script.Parent.Parent:WaitForChild("IncludedCommandUtil"))
 local Flags = require(game.ReplicatedStorage.FFlags)
 return {
-    Keyword = "flags",
+    Keyword = {"flaglogs","flogs"},
     Category = "BasicCommands",
-    Description = "Get all the flags and their values",
+    Description = "Get all the flag logs",
     ServerLoad = function(Api)
-        local GetFlagsRemoteFunction = Instance.new("RemoteFunction")
-        GetFlagsRemoteFunction.Name = "GetFlags"
-        GetFlagsRemoteFunction.Parent = Api.EventContainer
+        local GetFlagLogsRemoteFunction = Instance.new("RemoteFunction")
+        GetFlagLogsRemoteFunction.Name = "GetFlagLogs"
+        GetFlagLogsRemoteFunction.Parent = Api.EventContainer
 
-        GetFlagsRemoteFunction.OnServerInvoke = function()
-            return Flags:Connect():GetFlags() or {}
+        GetFlagLogsRemoteFunction.OnServerInvoke = function()
+            return Flags:Connect():GetFlagLogs() or {}
         end
     end,
     ClientRun = function(CommandContext)
@@ -25,13 +25,13 @@ return {
         local Api = Util:GetApi()
 
         local Window = ScrollingTextWindow.new()
-        Window.Title = "Flags"
+        Window.Title = "Flag Logs"
         Window.GetTextLines = function()
-            local flagData = Api.EventContainer:WaitForChild("GetFlags"):InvokeServer()
+            local flagData = Api.EventContainer:WaitForChild("GetFlagLogs"):InvokeServer()
             local flags = {}
 
             for _,fd in pairs(flagData) do 
-                table.insert(flags, { Text = fd.flag .. ": " .. (if typeof(fd.value) == "boolean" then (if fd.value == true then "✅" else "❌") else fd.value) })
+                table.insert(flags, { Text = fd.message })
             end
 
             return flags

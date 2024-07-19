@@ -77,6 +77,19 @@ function api:Load()
             return HttpService:JSONDecode(data).data
         end
 
+        function apiConnection:GetFlagLogs()
+            local success, data = pcall(function() 
+                return HttpService:GetAsync(url .. "/api/logs")
+            end)
+
+            if not success then 
+                warn("Failed to get logs: " .. data)
+                return false
+            end
+
+            return HttpService:JSONDecode(data).data
+        end
+
         function apiConnection:GetFFlagValue(flag)
             local success, data = pcall(function() 
                 return HttpService:PostAsync(url .. "/api/get", HttpService:JSONEncode({
