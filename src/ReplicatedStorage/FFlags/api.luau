@@ -51,7 +51,7 @@ function api:Load()
                 }))
             end)
             if not success then 
-                warn("Failed to set FFlag value: " .. err)
+                warn("Failed to set FFlag value: " .. data)
                 return false
             end
 
