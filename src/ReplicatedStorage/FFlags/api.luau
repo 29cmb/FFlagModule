@@ -113,7 +113,7 @@ function api:Load()
             end)
 
             if not success then 
-                warn("Failed to lock FFlag: " .. err)
+                warn("Failed to lock FFlag: " .. data)
                 return false
             end
 
@@ -134,7 +134,7 @@ function api:Load()
             end)
 
             if not success then 
-                warn("Failed to unlock FFlag: " .. err)
+                warn("Failed to unlock FFlag: " .. data)
                 return false
             end
 
