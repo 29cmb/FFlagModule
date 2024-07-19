@@ -147,6 +147,19 @@ function api:Load()
             end)
         end
 
+        function apiConnection:ClearLogs()
+            local success, data = pcall(function() 
+                return HttpService:PostAsync(url .. "/api/clearLogs", HttpService:JSONEncode({}))
+            end)
+
+            if not success then 
+                warn("Failed to clear logs: " .. data)
+                return false
+            end
+
+            return success
+        end
+
         return apiConnection
     end
 end
